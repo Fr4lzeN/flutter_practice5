@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/subscription.dart';
 import '../widgets/subscriptions_table.dart';
 
@@ -20,7 +21,27 @@ class SubscriptionsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Мои подписки'),
+        title: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: CachedNetworkImage(
+                imageUrl: 'https://cdn-icons-png.flaticon.com/512/2917/2917995.png',
+                width: 32,
+                height: 32,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.subscriptions),
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text('Мои подписки'),
+          ],
+        ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48.0),
           child: Container(
