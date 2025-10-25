@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/billing_cycle.dart';
 
 class AddSubscriptionScreen extends StatefulWidget {
-  final Function(String name, double cost, BillingCycle cycle) onSave;
+  final Function(String name, double cost, BillingCycle cycle, String imageUrl) onSave;
 
   const AddSubscriptionScreen({
     super.key,
@@ -17,12 +18,14 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _costController = TextEditingController();
+  final _imageUrlController = TextEditingController();
   BillingCycle _selectedCycle = BillingCycle.monthly;
 
   @override
   void dispose() {
     _nameController.dispose();
     _costController.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -30,7 +33,10 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
     if (_formKey.currentState!.validate()) {
       final name = _nameController.text;
       final cost = double.parse(_costController.text);
-      widget.onSave(name, cost, _selectedCycle);
+      final imageUrl = _imageUrlController.text.isEmpty 
+          ? 'https://via.placeholder.com/150' 
+          : _imageUrlController.text;
+      widget.onSave(name, cost, _selectedCycle, imageUrl);
     }
   }
 
@@ -47,16 +53,59 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Новая подписка'),
+        title: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: CachedNetworkImage(
+                imageUrl: 'https://cdn-icons-png.flaticon.com/512/1533/1533913.png',
+                width: 28,
+                height: 28,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.add_circle),
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text('Новая подписка'),
+          ],
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Декоративное изображение
+                Center(
+                  child: CachedNetworkImage(
+                    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3176/3176366.png',
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => const SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.add_card,
+                      size: 120,
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
                   labelText: 'Название',
@@ -86,6 +135,16 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _imageUrlController,
+                decoration: const InputDecoration(
+                  labelText: 'URL логотипа (опционально)',
+                  border: OutlineInputBorder(),
+                  hintText: 'https://logo.clearbit.com/domain.com',
+                ),
+                keyboardType: TextInputType.url,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<BillingCycle>(
@@ -123,6 +182,7 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

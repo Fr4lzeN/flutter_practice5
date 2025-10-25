@@ -28,6 +28,7 @@ class _SubscriptionsContainerState extends State<SubscriptionsContainer> {
         cost: 799.0,
         billingCycle: BillingCycle.monthly,
         createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/netflix.com',
       ),
       Subscription(
         id: '2',
@@ -35,6 +36,7 @@ class _SubscriptionsContainerState extends State<SubscriptionsContainer> {
         cost: 299.0,
         billingCycle: BillingCycle.monthly,
         createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/plus.yandex.ru',
       ),
       Subscription(
         id: '3',
@@ -42,6 +44,47 @@ class _SubscriptionsContainerState extends State<SubscriptionsContainer> {
         cost: 4399.0,
         billingCycle: BillingCycle.yearly,
         createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/office.com',
+      ),
+      Subscription(
+        id: '4',
+        name: 'Spotify',
+        cost: 169.0,
+        billingCycle: BillingCycle.monthly,
+        createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/spotify.com',
+      ),
+      Subscription(
+        id: '5',
+        name: 'YouTube Premium',
+        cost: 299.0,
+        billingCycle: BillingCycle.monthly,
+        createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/youtube.com',
+      ),
+      Subscription(
+        id: '6',
+        name: 'Apple Music',
+        cost: 199.0,
+        billingCycle: BillingCycle.monthly,
+        createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/apple.com',
+      ),
+      Subscription(
+        id: '7',
+        name: 'Discord Nitro',
+        cost: 599.0,
+        billingCycle: BillingCycle.monthly,
+        createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/discord.com',
+      ),
+      Subscription(
+        id: '8',
+        name: 'Adobe Creative Cloud',
+        cost: 2990.0,
+        billingCycle: BillingCycle.monthly,
+        createdAt: DateTime.now(),
+        imageUrl: 'https://logo.clearbit.com/adobe.com',
       ),
     ];
   }
@@ -58,13 +101,14 @@ class _SubscriptionsContainerState extends State<SubscriptionsContainer> {
     });
   }
 
-  void _addSubscription(String name, double cost, BillingCycle cycle) {
+  void _addSubscription(String name, double cost, BillingCycle cycle, String imageUrl) {
     final newSubscription = Subscription(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       name: name,
       cost: cost,
       billingCycle: cycle,
       createdAt: DateTime.now(),
+      imageUrl: imageUrl,
     );
 
     setState(() {

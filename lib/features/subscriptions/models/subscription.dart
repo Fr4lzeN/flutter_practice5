@@ -6,6 +6,7 @@ class Subscription {
   final double cost;
   final BillingCycle billingCycle;
   final DateTime createdAt;
+  final String imageUrl;
 
   Subscription({
     required this.id,
@@ -13,6 +14,7 @@ class Subscription {
     required this.cost,
     required this.billingCycle,
     required this.createdAt,
+    required this.imageUrl,
   });
 }
 
