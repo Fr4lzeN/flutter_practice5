@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/subscription.dart';
 import '../models/billing_cycle.dart';
 
@@ -45,7 +46,34 @@ class SubscriptionRow extends StatelessWidget {
         ),
       ),
       child: ListTile(
-        leading: const Icon(Icons.credit_card),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: CachedNetworkImage(
+            imageUrl: subscription.imageUrl,
+            width: 48,
+            height: 48,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Container(
+              width: 48,
+              height: 48,
+              color: Colors.grey[300],
+              child: const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              ),
+            ),
+            errorWidget: (context, url, error) => Container(
+              width: 48,
+              height: 48,
+              color: Colors.grey[300],
+              child: const Icon(
+                Icons.credit_card,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
         title: Text(subscription.name),
         subtitle: Text(
           '${subscription.cost.toStringAsFixed(2)} ₽ / ${_getBillingCycleText(subscription.billingCycle)}',
